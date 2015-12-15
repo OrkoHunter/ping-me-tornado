@@ -32,6 +32,25 @@ class MessageHandler(BaseHandler):
     def get(self):
         self.write("Hello from the other side")
 
+    def post(self):
+        try:
+            email = self.get_argument("email")
+            if sql_query._user_exists(email=email):
+                ping_datetime = self.get_argument("ping_datetime")
+                ping_datetime = datetime.datetime.strptime(ping_datetime, "%Y-%m-%d %H:%M:%S")
+                message = self.get_argument("message")
+                # process
+                DB.execute("INSERT INTO messages SET \
+                                email = '{}', \
+                                ping_datetime = '{:%Y-%m-%d :%H:%M:%S}', \
+                                message = '{}';".format(email, ping_datetime,
+                                                        message))
+                self.write({"success":"True"})
+            else:
+                self.write({"sucess":"False", "reason":"User doesn't exist"})
+        except Exception as e:
+            self.write({"success":"False", "reason":"Database Error, please report, " + e})
+
 
 class ConfigHandler(BaseHandler):
     def get(self):
