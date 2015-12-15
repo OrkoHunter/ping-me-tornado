@@ -2,7 +2,7 @@
 import tornado.web
 import torndb
 
-import mysql_query
+import sql_query
 
 options = {
     'mysql_host' : '127.0.0.1',
