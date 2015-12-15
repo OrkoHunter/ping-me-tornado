@@ -49,7 +49,7 @@ class MessageHandler(BaseHandler):
             else:
                 self.write({"sucess":"False", "reason":"User doesn't exist"})
         except Exception as e:
-            self.write({"success":"False", "reason":"Database Error, please report, " + e})
+            self.write({"success":"False", "reason":"Database Error, please report", "exception":"{}".format(e)})
 
 
 class ConfigHandler(BaseHandler):
