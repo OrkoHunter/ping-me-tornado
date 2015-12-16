@@ -1,14 +1,15 @@
 #!/usr/bin/env python
+import os
 import tornado.web
 import torndb
 
 import sql_query
 
 options = {
-    'mysql_host' : '127.0.0.1',
+    'mysql_host' : os.environ['OPENSHIFT_MYSQL_DB_HOST'],
     'mysql_database' : 'ping_me',
-    'mysql_user' : 'adminkQ5IJBY',
-    'mysql_password' : 'KlY1A-hSfgXU'
+    'mysql_user' : os.environ['OPENSHIFT_MYSQL_DB_USERNAME'],
+    'mysql_password' : os.environ['OPENSHIFT_MYSQL_DB_PASSWORD']
 }
 
 

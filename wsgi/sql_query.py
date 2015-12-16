@@ -1,8 +1,12 @@
 import MySQLdb as mdb
+import os
 import sys
 
 def _user_exists(email, phone='0'):
-    con = mdb.connect('127.0.0.1', 'adminkQ5IJBY', 'KlY1A-hSfgXU', 'ping_me')
+    con = mdb.connect(os.environ['OPENSHIFT_MYSQL_DB_HOST'],
+                      os.environ['OPENSHIFT_MYSQL_DB_USERNAME'],
+                      os.environ['OPENSHIFT_MYSQL_DB_PASSWORD'],
+                      'ping_me')
 
     with con:
         cur = con.cursor()
