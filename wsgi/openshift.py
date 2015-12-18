@@ -89,9 +89,35 @@ class ConfigHandler(BaseHandler):
             self.write({"success":"False", "reason":"Database Error, please report"})
 
 
+class PingHandler(BaseHandler):
+    def post(self):
+        try:
+            email = self.get_argument('email')
+            hashed_pass = self.get_argument('password')
+            if len(hashed_pass) != 32 or sql_query._user_exists(email) == False:
+                self.write({"success":"False", "reason":"Unauthorized"})
+            else:
+                if sql_query._authenticate(email, hashed_pass):
+                    q = DB.query("SELECT * FROM messages WHERE email = '" + email + "'ORDER BY ping_datetime;")
+                    if len(q) != 0:
+                        dt = q[0]['ping_datetime']
+                        t = datetime.datetime.now()
+                        if dt - t < datetime.timedelta(seconds=5) and dt > t:
+                            self.write({"success":"True", "message":q[0]['message']})
+                            DB.execute("DELETE FROM messages WHERE email = '" + email + "' AND ping_datetime = '" + dt.strftime("%Y-%m-%d %H:%M:00") + "';")
+                        else:
+                            self.write({"success":"False", "reason":"No message"})
+                    else:
+                        self.write({"success":"False", "reason":"No message"})
+                else:
+                    self.write({"success":"False", "reason":"Unauthorized"})
+        except Exception as e:
+            self.write({"success":"False", "reason":e})
+
 
 handlers = [
     (r'/', MainHandler),
     (r'/config/', ConfigHandler),
     (r'/message/', MessageHandler),
+    (r'/ping/', PingHandler),
     ]
