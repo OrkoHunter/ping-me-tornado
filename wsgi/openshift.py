@@ -5,6 +5,7 @@ import tornado.web
 import torndb
 
 import sql_query
+import cryptex
 
 options = {
     'mysql_host' : os.environ['OPENSHIFT_MYSQL_DB_HOST'],
@@ -125,10 +126,22 @@ class AuthenticateHandler(BaseHandler):
             self.write({"success":"False"})
 
 
+class CryptexHandler(BaseHandler):
+    def post(self):
+        key = self.get_argument("key")
+        cipher = self.get_argument("cipher")
+        try:
+            message = cryptex.decryptor(key, cipher)
+            self.write({"success": "True", "cipher": message})
+        except Exception as e:
+            self.write({"success": "False", "reason": e})
+
+
 handlers = [
     (r'/', MainHandler),
     (r'/config/', ConfigHandler),
     (r'/message/', MessageHandler),
     (r'/ping/', PingHandler),
     (r'/authenticate/', AuthenticateHandler),
+    (r'/cryptex/', CryptexHandler),
     ]
