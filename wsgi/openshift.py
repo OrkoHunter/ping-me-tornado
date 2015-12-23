@@ -94,7 +94,7 @@ class PingHandler(BaseHandler):
         try:
             email = self.get_argument('email')
             hashed_pass = self.get_argument('password')
-            if len(hashed_pass) != 32 or sql_query._user_exists(email) == False:
+            if len(hashed_pass) != 32 or sql_query._user_exists(email) is False:
                 self.write({"success":"False", "reason":"Unauthorized"})
             else:
                 if sql_query._authenticate(email, hashed_pass):
