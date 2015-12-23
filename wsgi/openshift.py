@@ -115,9 +115,20 @@ class PingHandler(BaseHandler):
             self.write({"success":"False", "reason":e})
 
 
+class AuthenticateHandler(BaseHandler):
+    def post(self):
+        email = self.get_argument("email")
+        hashed_pass = self.get_argument("password")
+        if sql_query._authenticate(email, hashed_pass):
+            self.write({"success":"True"})
+        else:
+            self.write({"success":"False"})
+
+
 handlers = [
     (r'/', MainHandler),
     (r'/config/', ConfigHandler),
     (r'/message/', MessageHandler),
     (r'/ping/', PingHandler),
+    (r'/authenticate/', AuthenticateHandler),
     ]
