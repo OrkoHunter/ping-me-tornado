@@ -96,7 +96,7 @@ class PingHandler(BaseHandler):
             email = self.get_argument('email')
             hashed_pass = self.get_argument('password')
             if len(hashed_pass) != 32 or sql_query._user_exists(email) is False:
-                self.write({"success":"False", "r":"False", "reason":"Unauthorized"})
+                self.write({"success":"False", "reason":"Unauthorized"})
             else:
                 if sql_query._authenticate(email, hashed_pass):
                     q = DB.query("SELECT * FROM messages WHERE email = '" + email + "'ORDER BY ping_datetime;")
@@ -104,16 +104,16 @@ class PingHandler(BaseHandler):
                         dt = q[0]['ping_datetime']
                         t = datetime.datetime.now()
                         if dt - t <= datetime.timedelta(seconds=60) and dt > t:
-                            self.write({"success":"True", "r":"True", "message":q[0]['message']})
+                            self.write({"success":"True", "message":q[0]['message']})
                             DB.execute("DELETE FROM messages WHERE email = '" + email + "' AND ping_datetime = '" + dt.strftime("%Y-%m-%d %H:%M:00") + "';")
                         else:
-                            self.write({"success":"False", "r":"False", "reason":"No message"})
+                            self.write({"success":"False", "reason":"No message"})
                     else:
-                        self.write({"success":"False", "r":"False", "reason":"No message"})
+                        self.write({"success":"False", "reason":"No message"})
                 else:
-                    self.write({"success":"False", "r":"False", "reason":"Unauthorized"})
+                    self.write({"success":"False", "reason":"Unauthorized"})
         except Exception as e:
-            self.write({"success":"False", "r":"False", "reason":e})
+            self.write({"success":"False", "reason":e})
 
 
 class AuthenticateHandler(BaseHandler):
@@ -121,9 +121,9 @@ class AuthenticateHandler(BaseHandler):
         email = self.get_argument("email")
         hashed_pass = self.get_argument("password")
         if sql_query._authenticate(email, hashed_pass):
-            self.write({"success":"True", "r":"True"})
+            self.write({"success":"True"})
         else:
-            self.write({"success":"False", "r":"False"})
+            self.write({"success":"False"})
 
 
 class CryptexHandler(BaseHandler):
@@ -134,9 +134,9 @@ class CryptexHandler(BaseHandler):
         cipher = cipher.replace(" ", "+")
         message = cryptex.decryptor(key, cipher)
         if message != "Could not decrypt the message - hm":
-            self.write({"success": "True", "r": "True", "cipher": message})
+            self.write({"success": "True", "cipher": message})
         else:
-            self.write({"success": "False", "r": "False", "key": key, "cipher": cipher})
+            self.write({"success": "False", "key": key, "cipher": cipher})
 
 
 handlers = [
