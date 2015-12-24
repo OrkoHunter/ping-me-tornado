@@ -8,17 +8,23 @@ mode = AES.MODE_CBC
 
 def encryptor(key, message):
     """Cipher a message using a key"""
-    IV = ''.join(chr(random.randint(0, 0xFF)) for i in range(16))
-    encrypto = AES.new(key, mode, IV=IV)
-    crypt_message = encrypto.encrypt(message)
-    cipher = crypt_message + IV
-    return base64.b64encode(cipher)
+    try:
+        IV = ''.join(chr(random.randint(0, 0xFF)) for i in range(16))
+        encrypto = AES.new(key, mode, IV=IV)
+        crypt_message = encrypto.encrypt(message)
+        cipher = crypt_message + IV
+        return base64.b64encode(cipher)
+    except:
+        return "Could not encrypt the message - hm"
 
 def decryptor(key, cipher):
     """Decipher a crypted message using a key"""
-    cipher = base64.b64decode(cipher)
-    IV = cipher[-16:]
-    decrypt_message = cipher[:-16]
-    decrpyto = AES.new(key, mode, IV=IV)
-    message = decrpyto.decrypt(decrypt_message)
-    return message
+    try:
+        cipher = base64.b64decode(cipher)
+        IV = cipher[-16:]
+        decrypt_message = cipher[:-16]
+        decrpyto = AES.new(key, mode, IV=IV)
+        message = decrpyto.decrypt(decrypt_message)
+        return message
+    except:
+        return "Could not decrypt the message - hm"

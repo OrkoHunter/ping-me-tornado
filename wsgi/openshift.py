@@ -130,11 +130,11 @@ class CryptexHandler(BaseHandler):
     def post(self):
         key = self.get_argument("key")
         cipher = self.get_argument("cipher")
-        try:
-            message = cryptex.decryptor(key, cipher)
+        message = cryptex.decryptor(key, cipher)
+        if message != "Could not decrypt the message - hm":
             self.write({"success": "True", "r": "True", "cipher": message})
-        except Exception as e:
-            self.write({"success": "False", "r": "False", "reason": e})
+        else:
+            self.write({"success": "False", "r": "False", "key": key, "cipher": cipher})
 
 
 handlers = [
