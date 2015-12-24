@@ -130,6 +130,8 @@ class CryptexHandler(BaseHandler):
     def post(self):
         key = self.get_argument("key")
         cipher = self.get_argument("cipher")
+        # Okay, weird javascript thing. We need to replace blank with +
+        cipher = cipher.replace(" ", "+")
         message = cryptex.decryptor(key, cipher)
         if message != "Could not decrypt the message - hm":
             self.write({"success": "True", "r": "True", "cipher": message})
