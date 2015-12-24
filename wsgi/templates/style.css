@@ -1,0 +1,22 @@
+
+    body {
+        font-size: 14px;
+/*        color: navy; */
+    }
+
+/*    h1 {
+        font-size: 20px;
+        text-decoration: underline;
+    }
+*/
+
+    table {
+        padding: 6px;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    td {
+        border-style: inset;
+        border-width: 1px;
+    }
