@@ -105,7 +105,6 @@ class PingHandler(BaseHandler):
                         t = datetime.datetime.now()
                         if dt - t <= datetime.timedelta(seconds=60) and dt > t:
                             self.write({"success":"True", "message":q[0]['message']})
-                            DB.execute("DELETE FROM messages WHERE email = '" + email + "' AND ping_datetime = '" + dt.strftime("%Y-%m-%d %H:%M:00") + "';")
                         else:
                             self.write({"success":"False", "reason":"No message"})
                     else:
