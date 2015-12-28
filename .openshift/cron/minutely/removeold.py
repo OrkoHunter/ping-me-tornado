@@ -21,3 +21,5 @@ t = datetime.datetime.now()
 for i in q:
     if i['ping_datetime'] < t:
         DB.execute("DELETE FROM messages WHERE email = '" + i['email'] + "' AND ping_datetime = '" + i['ping_datetime'].strftime("%Y-%m-%d %H:%M:00") + "';")
+
+DB.close()
